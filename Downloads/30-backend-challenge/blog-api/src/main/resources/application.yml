@@ -1,0 +1,19 @@
+server:
+  error:
+    include-stacktrace: never
+spring:
+  application:
+    name: blog-api
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/blog?createDatabaseIfNotExist=true
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true #Makes SQL logs more readable
