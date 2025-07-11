@@ -1,12 +1,11 @@
 package com.food_delivery.zomato_backend.dtos.RestaurantDtos;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -17,6 +16,7 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class RestaurantRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
@@ -24,6 +24,14 @@ public class RestaurantRequestDto {
     private String address;
     @NotBlank(message = "Location is required")
     private String location;
+    @NotNull
+    @DecimalMin("-90.0") @DecimalMax("90.0")
+    private Double latitude;
+
+    @NotNull
+    @DecimalMin("-180.0") @DecimalMax("180.0")
+    private Double longitude;
+
     @NotBlank
     @Size(min = 10, max = 10)
     private String phoneNumber;
@@ -32,7 +40,9 @@ public class RestaurantRequestDto {
     @NotBlank
     @Builder.Default
     private BigDecimal rating = BigDecimal.valueOf(4.0);
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime openingTime;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime closingTime;
     private Long ownerId; ///Id of the user who owns the restaurant
 }

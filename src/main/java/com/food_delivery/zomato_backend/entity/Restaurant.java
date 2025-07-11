@@ -21,8 +21,15 @@ public class Restaurant extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    // For geolocation (required for nearby search)
+    @Column(nullable = false)
     private String address;
     private String location;
+    @Builder.Default
+    private Double latitude = 0.0;
+    @Column(nullable = false)
+    @Builder.Default
+    private Double longitude = 0.0;
     @Column(name="phone_number",unique = true)
     private String phoneNumber;
     @Column(name="email",unique = true)

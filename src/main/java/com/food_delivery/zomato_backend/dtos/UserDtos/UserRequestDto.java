@@ -14,10 +14,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@Builder
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class UserRequestDto {
     @NotBlank
     @Size(min = 2, max = 50)

@@ -1,5 +1,6 @@
 package com.food_delivery.zomato_backend.dtos.RestaurantDtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.food_delivery.zomato_backend.dtos.MenuItemDtos.MenuItemResponseDto;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserBasicDto;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +22,10 @@ public class RestaurantResponseDto {
     private Long id;
     private String name;
     private String address;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+    private Double latitude;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT)
+    private Double longitude;
     private String location;
     private String phoneNumber;
     private String email;

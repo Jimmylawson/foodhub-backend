@@ -8,6 +8,7 @@ import com.food_delivery.zomato_backend.entity.Restaurant;
 import com.food_delivery.zomato_backend.enumTypes.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class UserResponseDto {
     private String name;
     private String email;
     private String address;
+    @Pattern(regexp = "^\\+?[0-9\\s-]{10,}$")
     private String phoneNumber;
     private Role role;
 

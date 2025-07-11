@@ -1,4 +1,4 @@
-package com.food_delivery.zomato_backend.exceptions.DeliveryExcpetion;
+package com.food_delivery.zomato_backend.exceptions.restaurantException;
 
 public class DeliveryNotFoundException extends RuntimeException {
     /**
