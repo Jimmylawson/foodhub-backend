@@ -1,9 +1,11 @@
 package com.food_delivery.zomato_backend.dtos.PaymentDtos;
 
 
+import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderRequestDto;
 import com.food_delivery.zomato_backend.enumTypes.PaymentType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +21,13 @@ import java.time.LocalTime;
 public class PaymentRequestDto {
     @NotBlank(message = "Order details are required")
     private OrderRequestDto order;
-    @NotBlank(message = "Payment type is required")
+    @NotNull(message = "Payment type is required")
     private PaymentType paymentType;
-    private Status status;
+    @NotNull(message = "Status is required")
+    private Status status = Status.PENDING;
+    @NotBlank(message = "Transaction id is required")
     private String transactionId;
+
     private LocalDateTime paidAt;
 
 }

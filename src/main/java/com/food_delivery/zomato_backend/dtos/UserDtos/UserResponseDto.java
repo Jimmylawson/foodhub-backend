@@ -27,10 +27,10 @@ public class UserResponseDto {
     private String phoneNumber;
     private Role role;
 
-    /// Just basic counts
-    private long orderCount;
-    private long deliveryCount;
-    private long restaurantCount;
+//    /// Just basic counts
+//    private long orderCount;
+//    private long deliveryCount;
+//    private long restaurantCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

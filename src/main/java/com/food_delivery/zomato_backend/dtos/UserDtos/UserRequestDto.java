@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class UserRequestDto {
     @NotBlank
     @Size(min = 2, max = 50)
-    private String name;
+    private String username;
     @Email(message = "Email is not valid")
     private String email;
     @NotBlank(message = "Password is required")

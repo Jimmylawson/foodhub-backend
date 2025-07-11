@@ -1,9 +1,11 @@
 package com.food_delivery.zomato_backend.entity;
 
 
+import com.food_delivery.zomato_backend.enumTypes.OrderType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -16,8 +18,8 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type; /// delivery orr pickup
-    private Double price;
+    private OrderType type; /// delivery orr pickup
+    private BigDecimal price;
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User user;

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -30,7 +31,7 @@ public class RestaurantRequestDto {
     private String email;
     @NotBlank
     @Builder.Default
-    private Integer rating = 4;
+    private BigDecimal rating = BigDecimal.valueOf(4.0);
     private LocalTime openingTime;
     private LocalTime closingTime;
     private Long ownerId; ///Id of the user who owns the restaurant

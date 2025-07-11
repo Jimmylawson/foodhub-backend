@@ -19,10 +19,11 @@ public class MenuItemRequestDto {
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
-
-    private ItemType type;
     @NotBlank(message = "Price is required")
     private BigDecimal price;
+    @NotNull(message="type is required")
+    private ItemType type;
+
     @NotNull(message = "Restaurant ID is required")
     private Long restaurantId;
     @NotNull(message = "Order ID is required")

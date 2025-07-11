@@ -28,9 +28,6 @@ public class Delivery extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "order_id",unique = true)
     private Order order;
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
     @Column(name="pickup_time")
     private LocalTime pickupTime;
     @Column(name="delivery_time")

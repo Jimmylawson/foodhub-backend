@@ -1,5 +1,6 @@
 package com.food_delivery.zomato_backend.dtos.PaymentDtos;
 
+import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderResponseDto;
 import com.food_delivery.zomato_backend.enumTypes.PaymentType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class PaymentResponseDto {
     private PaymentType paymentType;
     private Status status;
     private String transactionId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "UTC")
     private LocalDateTime paidAt;
 
 }

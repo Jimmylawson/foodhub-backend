@@ -4,6 +4,7 @@ package com.food_delivery.zomato_backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Restaurant extends BaseEntity {
     private String phoneNumber;
     @Column(name="email",unique = true)
     private String email;
-    private Integer rating;
+    private BigDecimal rating;
     @Column(name="opening_time")
     private LocalTime openingTime;
     @Column(name="closing_time")
@@ -38,7 +39,5 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<MenuItem> menuItems;
 
-    @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Delivery> deliveries;
 
 }

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -23,7 +24,7 @@ public class RestaurantResponseDto {
     private String location;
     private String phoneNumber;
     private String email;
-    private Integer rating;
+    private BigDecimal rating;
     private LocalDateTime openingTime;
     private LocalDateTime closingTime;
     private UserBasicDto owner;
@@ -31,7 +32,4 @@ public class RestaurantResponseDto {
 
     /// Optional: Add these if you track them
 
-    @NotBlank
-    private LocalTime createdAt;
-    private LocalTime updatedAt;
 }

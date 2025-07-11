@@ -17,17 +17,13 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class DeliveryResponseDto {
     private Long id;
-
-
     /// Order reference
     private Long orderId;
-
 
     /// Delivery mode
     private Mode mode;
 
     ///Timestamps
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "HH:mm:ss")
