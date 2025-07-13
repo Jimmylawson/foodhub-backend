@@ -2,6 +2,8 @@ package com.food_delivery.zomato_backend.dtos.DeliveryDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.food_delivery.zomato_backend.enumTypes.DeliveryStatus;
 import com.food_delivery.zomato_backend.enumTypes.Mode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +22,9 @@ public class DeliveryResponseDto {
     /// Order reference
     private Long orderId;
 
+    /// Delivery person
+    private Long deliveryPersonId;
+    private String deliveryPersonName;
     /// Delivery mode
     private Mode mode;
 
@@ -31,11 +36,8 @@ public class DeliveryResponseDto {
     @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime deliveryTime;
 
-    @Builder.Default
-    private String status = "PENDING";
+    private DeliveryStatus status;
+    private String address;
 
-    /// Calculated field
-    public String getEstimatedDeliveryTime() {
-        return pickupTime != null ? pickupTime.plusMinutes(30).toString() : "N/A";
-    }
+
 }
