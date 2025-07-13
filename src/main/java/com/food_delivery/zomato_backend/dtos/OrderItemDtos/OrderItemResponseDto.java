@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @Builder
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class OrderItemResponseDto {
     private Long id;
     @Builder.Default

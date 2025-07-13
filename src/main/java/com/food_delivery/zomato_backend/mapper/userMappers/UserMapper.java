@@ -1,4 +1,4 @@
-package com.food_delivery.zomato_backend.mapper;
+package com.food_delivery.zomato_backend.mapper.userMappers;
 
 
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserRequestDto;

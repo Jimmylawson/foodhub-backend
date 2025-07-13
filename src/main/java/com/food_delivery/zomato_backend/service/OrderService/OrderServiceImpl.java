@@ -1,22 +1,22 @@
 package com.food_delivery.zomato_backend.service.OrderService;
 
-import com.food_delivery.zomato_backend.dtos.MenuItemDtos.MenuItemResponseDto;
 import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderRequestDto;
 import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderResponseDto;
-import com.food_delivery.zomato_backend.dtos.OrderItemDtos.OrderItemResponseDto;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserBasicDto;
 import com.food_delivery.zomato_backend.entity.Delivery;
 import com.food_delivery.zomato_backend.entity.Order;
 import com.food_delivery.zomato_backend.entity.OrderItem;
-i
+
 import com.food_delivery.zomato_backend.entity.Payment;
 import com.food_delivery.zomato_backend.enumTypes.DeliveryStatus;
 import com.food_delivery.zomato_backend.enumTypes.OrderType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
 import com.food_delivery.zomato_backend.exceptions.restaurantException.MenuItemNotFoundException;
 import com.food_delivery.zomato_backend.exceptions.restaurantException.RestaurantNotFoundException;
+import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
 import com.food_delivery.zomato_backend.mapper.OrderMapper;
 import com.food_delivery.zomato_backend.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,62 +26,41 @@ import java.util.List;
 import java.util.UUID;
 
 
+
+record OrderItemResult(List<OrderItem> orderItems, BigDecimal totalPrice){}
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderServiceInterface {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final PaymentRepository paymentRepository;
-    private final DeliveryRepository deliveryRepository;
     private final MenuItemRepository menuItemRepository;
 
 
     /// Find the order
-    private Order getRestaurantOrThrowError(Long id) {
+    public Order getOrderOrThrowError(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
 
     @Override
+    @Transactional
     public OrderResponseDto saveOrder(OrderRequestDto orderRequestDto) {
         ///  Fetch the User
         var user = userRepository.findById(orderRequestDto.getUserId())
-                .orElseThrow(() -> new RestaurantNotFoundException(orderRequestDto.getUserId()));
-        UserBasicDto userBasic = UserBasicDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getUsername())
-                .build();
+                .orElseThrow(() -> new UserNotFoundException(orderRequestDto.getUserId()));
 
         /// convert and save the orderItem
-        List<OrderItem> orderItems = orderRequestDto.getItems().stream()
-                .map(itemDto -> {
-                    var menuItem = menuItemRepository.findById(itemDto.getMenuItemId())
-                            .orElseThrow(() -> new MenuItemNotFoundException(itemDto.getMenuItemId()));
-                    return OrderItem.builder()
-                            .menuItem(menuItem)
-                            .quantity(itemDto.getQuantity())
-                            .price(menuItem.getPrice()) // single item price
-                            .build();
-                }).toList();
-
-
-
-        /// Calculate the total price
-        BigDecimal totalPrice = orderItems.stream()
-            .map(item->item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        var result = convertToOrderItemsAndCalculateTotal(orderRequestDto);
+        List<OrderItem> orderItems = result.orderItems();
+        BigDecimal totalPrice = result.totalPrice();
 
         Order order = Order.builder()
                 .type(orderRequestDto.getType())
                 .price(totalPrice)
                 .user(user)
                 .orderItems(orderItems)
-                .delivery(null)
-                .payment(null)
                 .build();
 
 
@@ -121,16 +100,70 @@ public class OrderServiceImpl implements OrderServiceInterface {
 
     @Override
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequestDto) {
-        return null;
+        /// Fetch the order from the database
+        var order  = getOrderOrThrowError(orderId);
+
+        /// Update fields only if it is not null
+        if(orderRequestDto.getType() !=null){
+            order.setType(orderRequestDto.getType());
+        }
+        if(orderRequestDto.getPaymentType() !=null && order.getPayment() != null){
+            order.getPayment().setPaymentType(orderRequestDto.getPaymentType());
+
+        }
+        if(orderRequestDto.getDeliveryAddress() !=null && order.getDelivery() != null && order.getType() == OrderType.DELIVERY){
+            order.getDelivery().setAddress(orderRequestDto.getDeliveryAddress());
+        }
+        /// If item are included update them
+        if(orderRequestDto.getItems() != null && !orderRequestDto.getItems().isEmpty()){
+            /// Clear the existing items
+        order.getOrderItems().clear();
+        /// Convert and save the new items
+        var result = convertToOrderItemsAndCalculateTotal(orderRequestDto);
+        List<OrderItem> updateItems = result.orderItems();
+        var totalPrice = result.totalPrice();
+
+        /// Set reverser relationship: each OrderItem needs its Order
+        updateItems.forEach(item->item.setOrder(order));
+        order.getOrderItems().addAll(updateItems);
+        }
+
+        orderRepository.save(order);
+
+        /// Convert and return the response
+        return orderMapper.toOrderResponseDto(order);
+
     }
 
+    private OrderItemResult convertToOrderItemsAndCalculateTotal(OrderRequestDto orderRequestDto) {
+        List<OrderItem> orderItems = orderRequestDto.getItems().stream()
+                .map(itemDto -> {
+                    var menuItem = menuItemRepository.findById(itemDto.getMenuItemId())
+                            .orElseThrow(() -> new MenuItemNotFoundException(itemDto.getMenuItemId()));
+                    return OrderItem.builder()
+                            .menuItem(menuItem)
+                            .quantity(itemDto.getQuantity())
+                            .price(menuItem.getPrice()) // single item price
+                            .build();
+                }).toList();
+
+
+
+        /// Calculate the total price
+        BigDecimal totalPrice = orderItems.stream()
+                .map(item->item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new OrderItemResult(orderItems, totalPrice);
+    }
     @Override
     public OrderResponseDto getOrder(Long orderId) {
-        return null;
+       return orderMapper.toOrderResponseDto(getOrderOrThrowError(orderId));
     }
 
     @Override
     public void deleteOrder(Long orderId) {
-
+        var order = getOrderOrThrowError(orderId);
+        orderRepository.delete(order);
     }
 }

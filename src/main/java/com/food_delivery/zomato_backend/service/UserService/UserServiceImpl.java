@@ -5,11 +5,10 @@ import com.food_delivery.zomato_backend.dtos.UserDtos.UserResponseDto;
 import com.food_delivery.zomato_backend.entity.User;
 import com.food_delivery.zomato_backend.exceptions.users.DuplicateUserException;
 import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
-import com.food_delivery.zomato_backend.mapper.UserMapper;
+import com.food_delivery.zomato_backend.mapper.userMappers.UserMapper;
 import com.food_delivery.zomato_backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

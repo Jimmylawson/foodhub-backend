@@ -14,10 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemRequestDto {
-
+    @NotNull(message = "Order id is required")
+    @Positive(message = "Order id must be positive")
+    private Long orderId;
     @NotNull(message = "Quantity is required")
     @Positive(message = "Quantity must be positive")
-   private Long quantity;
+   private Integer quantity;
     @NotNull(message = "Menu item id is required")
     @Positive(message = "Menu item id must be positive")
     private Long menuItemId;
