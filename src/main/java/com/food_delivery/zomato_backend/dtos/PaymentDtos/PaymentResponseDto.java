@@ -3,6 +3,7 @@ package com.food_delivery.zomato_backend.dtos.PaymentDtos;
 import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderResponseDto;
 import com.food_delivery.zomato_backend.enumTypes.PaymentType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class PaymentResponseDto {
     private Status status;
     private String transactionId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "UTC")
+    @FutureOrPresent(message = "Payment data cannot be in the past")
     private LocalDateTime paidAt;
 
 }

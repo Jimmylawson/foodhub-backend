@@ -18,7 +18,7 @@ public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private OrderType type; /// delivery orr pickup
+    private OrderType type; /// delivery or pickup
     private BigDecimal price;
     @ManyToOne
     @JoinColumn(name ="user_id")

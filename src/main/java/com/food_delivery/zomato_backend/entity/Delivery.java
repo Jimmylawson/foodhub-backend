@@ -28,16 +28,12 @@ public class Delivery extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "order_id",unique = true)
     private Order order;
-    @Column(name="pickup_time")
-    private LocalTime pickupTime;
+    @Column(name = "delivery_address", nullable = false)
+    private String address;
     @Column(name="delivery_time")
     private LocalTime deliveryTime;
     @Enumerated(EnumType.STRING)
-    @Column(name="mode")
-    private Mode Mode;
-    @Enumerated(EnumType.STRING)
     @Column(name="delivery_status")
-    private DeliveryStatus deliveryStatus = DeliveryStatus.PENDING;
-
+    private DeliveryStatus deliveryStatus;
 
 }

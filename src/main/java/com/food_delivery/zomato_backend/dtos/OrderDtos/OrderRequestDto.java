@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -15,12 +16,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class OrderRequestDto {
     @NotBlank(message = "Type is required")
     private OrderType type;
     @NotNull(message = "User ID is required")
     private Long userId;
     private List<OrderItemRequestDto> items;
-    private String deliveryAddress;
     private PaymentType paymentType;
+    private String deliveryAddress;
+
 }

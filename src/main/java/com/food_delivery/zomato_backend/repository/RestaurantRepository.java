@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.lang.ScopedValue;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,7 +17,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant,Long> {
     boolean existsByName(@NotBlank(message = "Name is required") String name);
     @Query("SELECT r FROM Restaurant r WHERE " +
             "LOWER(r.name) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-            "LOWER(r.cuisineType) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(r.address) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Restaurant> searchRestaurants(@Param("query") String query);
 

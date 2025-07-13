@@ -17,7 +17,7 @@ public class OrderItemRequestDto {
 
     @NotNull(message = "Quantity is required")
     @Positive(message = "Quantity must be positive")
-   private Integer quantity;
+   private Long quantity;
     @NotNull(message = "Menu item id is required")
     @Positive(message = "Menu item id must be positive")
     private Long menuItemId;

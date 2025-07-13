@@ -53,7 +53,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
     }
+    /// Payment
+    @ExceptionHandler(PaymentNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handlePaymentNotFoundException(PaymentNotFoundException ex) {
+        log.error("Payment not found exception occurred: {}", ex.getMessage());
+        var errorResponseDto = new ErrorResponseDto(
+                "Payment not found",
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                LocalDateTime.now());
 
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+    }
     /// ORDER
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleOrderNotFoundException(OrderNotFoundException ex) {
