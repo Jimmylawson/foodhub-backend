@@ -5,7 +5,7 @@ import com.food_delivery.zomato_backend.dtos.MenuItemDtos.MenuItemRequestDto;
 import com.food_delivery.zomato_backend.dtos.MenuItemDtos.MenuItemResponseDto;
 import org.mapstruct.Mapper;
 
-import java.awt.*;
+import com.food_delivery.zomato_backend.entity.MenuItem;
 
 @Mapper(componentModel = "spring")
 public interface MenuItemMapper {

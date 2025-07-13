@@ -7,13 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class MenuItemRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
@@ -26,6 +27,5 @@ public class MenuItemRequestDto {
 
     @NotNull(message = "Restaurant ID is required")
     private Long restaurantId;
-    @NotNull(message = "Order ID is required")
-    private Long orderId;
+
 }

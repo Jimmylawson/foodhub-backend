@@ -1,6 +1,6 @@
 package com.food_delivery.zomato_backend.entity;
 
-import com.food_delivery.zomato_backend.enumTypes.Category;
+
 import com.food_delivery.zomato_backend.enumTypes.ItemType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,16 +12,15 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name="menu_items")
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@AllArgsConstructor
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name; ///Name of the item
     private String description; ///Description of the item
-//    private Integer quantity; ///Quantity of the item
     private BigDecimal price; ///Price of the item
     @Enumerated(EnumType.STRING)
     private ItemType type; /// Veg, Non-Veg, Vegan
