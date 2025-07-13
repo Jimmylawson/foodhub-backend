@@ -30,8 +30,8 @@ public class RestaurantResponseDto {
     private String phoneNumber;
     private String email;
     private BigDecimal rating;
-    private LocalDateTime openingTime;
-    private LocalDateTime closingTime;
+    private LocalTime openingTime;
+    private LocalTime closingTime;
     private UserBasicDto owner;
     private List<MenuItemResponseDto> menuItems;
 

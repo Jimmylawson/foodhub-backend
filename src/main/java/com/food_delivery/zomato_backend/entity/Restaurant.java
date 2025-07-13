@@ -10,8 +10,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Setter
-@Getter
+@Setter @Getter
 @Table(name="restaurants")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +19,7 @@ public class Restaurant extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
     // For geolocation (required for nearby search)
     @Column(nullable = false)

@@ -3,9 +3,7 @@ package com.food_delivery.zomato_backend.mapper;
 
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantRequestDto;
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantResponseDto;
-import com.food_delivery.zomato_backend.dtos.UserDtos.UserRequestDto;
 import com.food_delivery.zomato_backend.entity.Restaurant;
-import com.food_delivery.zomato_backend.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

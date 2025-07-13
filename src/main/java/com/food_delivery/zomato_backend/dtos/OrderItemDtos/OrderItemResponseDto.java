@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 
 @Builder
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemResponseDto {
     private Long id;

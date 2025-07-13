@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class MenuItemResponseDto {
     private Long id;
     private String name;

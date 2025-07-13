@@ -1,7 +1,7 @@
 package com.food_delivery.zomato_backend.dtos.MenuItemDtos;
 
 
-import com.food_delivery.zomato_backend.enumTypes.Category;
+
 import com.food_delivery.zomato_backend.enumTypes.ItemType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class MenuItemRequestDto {
     @NotBlank(message = "Name is required")
@@ -24,7 +25,6 @@ public class MenuItemRequestDto {
     private BigDecimal price;
     @NotNull(message="type is required")
     private ItemType type;
-
     @NotNull(message = "Restaurant ID is required")
     private Long restaurantId;
 
