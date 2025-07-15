@@ -40,7 +40,7 @@ public class UserController {
         @ApiResponse(responseCode = "404", description = "User not found")
     })
      @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUser(Long userId){
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long userId){
         return ResponseEntity.ok(userService.getUser(userId));
     }
 

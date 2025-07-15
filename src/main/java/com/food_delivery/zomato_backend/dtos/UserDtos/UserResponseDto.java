@@ -22,17 +22,13 @@ import java.util.List;
 public class UserResponseDto {
     private Long id;
 
-    private String name;
+    private String username;
     private String email;
     private String address;
     @Pattern(regexp = "^\\+?[0-9\\s-]{10,}$")
     private String phoneNumber;
     private Role role;
 
-//    /// Just basic counts
-//    private long orderCount;
-//    private long deliveryCount;
-//    private long restaurantCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
