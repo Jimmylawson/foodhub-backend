@@ -13,6 +13,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,16 +27,23 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+    private ErrorResponseDto buildErrorResponse(String message, HttpStatus status, String  details){
+        return new ErrorResponseDto(
+                message,
+                status,
+                details,
+                LocalDateTime.now()
+        );
+    }
 
     /// RESTAURANT
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRestaurantNotFoundException(RestaurantNotFoundException ex) {
         log.error("Restaurant not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "Restaurant not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -44,24 +52,22 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateRestaurantException.class)
     public ResponseEntity<ErrorResponseDto> handleDuplicateRestaurantException(DuplicateUserException ex) {
         log.error("User already exists: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
-                "User  duplicate Not  found",
+        var errorResponseDto = buildErrorResponse(
+                "Restaurant  duplicate Not  found",
                 HttpStatus.CONFLICT,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
 
     }
     /// Payment
     @ExceptionHandler(PaymentNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handlePaymentNotFoundException(PaymentNotFoundException ex) {
         log.error("Payment not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "Payment not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
@@ -69,11 +75,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleOrderNotFoundException(OrderNotFoundException ex) {
         log.error("Order not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "Order not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -83,11 +88,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MenuItemNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleMenuItemNotFoundException(MenuItemNotFoundException ex) {
         log.error("MenuItem not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "MenuItem not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -96,11 +100,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DeliveryNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleDeliveryNotFoundException(DeliveryNotFoundException ex) {
         log.error("Delivery not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "Delivery not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -111,11 +114,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderItemNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleOrderItemNotFoundException(OrderItemNotFoundException ex) {
         log.error("OrderItem not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "Item not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -125,11 +127,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException ex) {
         log.error("User not found exception occurred: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
+        var errorResponseDto = buildErrorResponse(
                 "User not found",
                 HttpStatus.NOT_FOUND,
-                ex.getMessage(),
-                LocalDateTime.now());
+                ex.getMessage());
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
 
@@ -138,13 +139,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateUserException.class)
     public ResponseEntity<ErrorResponseDto> handlerDuplicateUserException(DuplicateUserException ex) {
         log.error("User already exists: {}", ex.getMessage());
-        var errorResponseDto = new ErrorResponseDto(
-                "User  duplicate Not  found",
+        var errorResponseDto = buildErrorResponse(
+                "User  already exists",
                 HttpStatus.CONFLICT,
-                ex.getMessage(),
-                LocalDateTime.now());
-
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
 
     }
 
@@ -152,10 +152,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGenericException(Exception ex, WebRequest webRequest) {
         log.error("An exception occurred: {}", ex.getMessage());
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+
+        ErrorResponseDto errorResponseDto = buildErrorResponse(
                 webRequest.getDescription(false),
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                ex.getMessage(), LocalDateTime.now());
+                ex.getMessage());
         return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -185,7 +186,19 @@ public class GlobalExceptionHandler {
                 .body(Map.of("errors", errors));
     }
 
-
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDto> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex) {
+        log.error("Malformed JSON request: {}", ex.getMessage());
+        return new ResponseEntity<>(
+                buildErrorResponse(
+                        "Malformed JSON request",
+                        HttpStatus.BAD_REQUEST,
+                        "Request JSON is malformed"
+                ),
+                HttpStatus.BAD_REQUEST
+        );
+    }
 
 
 }
