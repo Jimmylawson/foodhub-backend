@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class UserController {
                     @ApiResponse(responseCode = "404", description = "User not found")
             })
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers(@PageableDefault(size = 10, sort ="createdAt") Pageable pageable){
+    public ResponseEntity<Page<UserResponseDto>> getAllUsers(@PageableDefault(size = 10, sort ="createdAt") Pageable pageable){
          return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 

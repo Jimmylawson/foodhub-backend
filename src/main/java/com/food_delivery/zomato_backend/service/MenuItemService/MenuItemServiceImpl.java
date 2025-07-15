@@ -12,9 +12,9 @@ import com.food_delivery.zomato_backend.repository.OrderRepository;
 import com.food_delivery.zomato_backend.repository.RestaurantRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -82,13 +82,11 @@ public class MenuItemServiceImpl implements MenuItemServiceInterface {
     }
 
     @Override
-    public List<MenuItemResponseDto> getMenuItemByRestaurantId(Long id) {
-      var restaurant   = restaurantRepository.findById(id)
-                .orElseThrow(() -> new RestaurantNotFoundException(id));
+    public Page<MenuItemResponseDto> getAllMenuItemByRestaurantId(Long restaurantId, Pageable pageable) {
+      if(!restaurantRepository.existsById(restaurantId))
+          throw new RestaurantNotFoundException(restaurantId);
         return menuItemRepository
-                .findByRestaurant(restaurant)
-                .stream()
-                .map(menuItemMapper::toMenuItemResponseDto)
-                .toList();
+                .findByRestaurantId(restaurantId,pageable)
+                .map(menuItemMapper::toMenuItemResponseDto);
     }
 }

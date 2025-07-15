@@ -14,6 +14,8 @@ import com.food_delivery.zomato_backend.repository.DeliveryRepository;
 import com.food_delivery.zomato_backend.repository.OrderRepository;
 import com.food_delivery.zomato_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -121,11 +123,9 @@ public class DeliveryServiceImpl  implements DeliveryServiceInterface {
     }
 
     @Override
-    public List<DeliveryResponseDto> getAllDeliveries() {
+    public Page<DeliveryResponseDto> getAllDeliveries(Pageable pageable) {
 
-        return deliveryRepository.findAll()
-                .stream()
-                .map(deliveryMapper::toDeliveryResponseDto)
-                .toList();
+        return deliveryRepository.findAll(pageable)
+                .map(deliveryMapper::toDeliveryResponseDto);
     }
 }

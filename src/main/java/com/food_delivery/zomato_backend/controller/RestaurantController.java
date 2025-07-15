@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/restaurants")
@@ -34,7 +34,7 @@ public class RestaurantController {
     @ApiResponse(responseCode = "200", description = "Restaurant found successfully")
     @ApiResponse(responseCode = "404", description = "Restaurant not found")
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<RestaurantResponseDto> getRestaurant(Long restaurantId){
+    public ResponseEntity<RestaurantResponseDto> getRestaurant(@PathVariable Long restaurantId){
         return ResponseEntity.ok(restaurantService.getRestaurant(restaurantId));
     }
 
@@ -42,7 +42,7 @@ public class RestaurantController {
     @ApiResponse(responseCode = "200", description = "Restaurants found successfully")
     @ApiResponse(responseCode = "404", description = "Restaurants not found")
     @GetMapping()
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(@PageableDefault(size = 10, sort = "name") Pageable pageable){
+    public ResponseEntity<Page<RestaurantResponseDto>> getAllRestaurants(@PageableDefault(size = 10, sort = "name") Pageable pageable){
         return ResponseEntity.ok(restaurantService.getAllRestaurants(pageable));
     }
 
