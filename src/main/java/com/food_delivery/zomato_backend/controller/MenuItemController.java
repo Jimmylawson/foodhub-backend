@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/menu-items")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Menu Items",description = "Menu Items Managemnt APIs")
 public class MenuItemController {
@@ -26,7 +26,7 @@ public class MenuItemController {
     /// Create endpoints
     @Operation(summary = "Create a new menu item")
     @ApiResponse(responseCode = "201", description = "Menu item created successfully")
-    @PostMapping
+    @PostMapping("/restaurants/menu-items")
     public ResponseEntity<MenuItemResponseDto> createMenuItem(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(menuItemServiceInterface.saveMenuItem(menuItemRequestDto));
     }
@@ -38,7 +38,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "200", description = "Menu item found successfully"),
             @ApiResponse(responseCode = "404", description = "Menu item not found")
     })
-    @GetMapping("/{menuItemId}")
+    @GetMapping("/restaurants/menu-items/{menuItemId}")
     public ResponseEntity<MenuItemResponseDto> getMenuItem(@PathVariable Long menuItemId) {
         return ResponseEntity.ok(menuItemServiceInterface.getMenuItem(menuItemId));
     }
@@ -49,7 +49,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "404", description = "Menu items not found")
     })
     @GetMapping("/restaurants/{restaurantId}/menu-items")
-    public ResponseEntity<Page<MenuItemResponseDto>> geetAllMenuItemsByRestaurants(@PathVariable Long restaurantId, @PageableDefault(size = 10, sort = "name") Pageable pageable){
+    public ResponseEntity<Page<MenuItemResponseDto>> getAllMenuItemsByRestaurants(@PathVariable Long restaurantId, @PageableDefault(size = 10, sort = "name") Pageable pageable){
         return ResponseEntity.ok(menuItemServiceInterface.getAllMenuItemByRestaurantId(restaurantId, pageable));
     }
 
@@ -81,7 +81,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "204", description = "Menu item deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Menu item not found")
     })
-    @DeleteMapping("/{menuItemId}")
+    @DeleteMapping("/menu-items/{menuItemId}")
     public ResponseEntity<Void> deleteMenuItem(@PathVariable Long menuItemId){
         menuItemServiceInterface.deleteMenuItem(menuItemId);
         return ResponseEntity.noContent().build();

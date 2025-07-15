@@ -3,6 +3,7 @@ package com.food_delivery.zomato_backend.dtos.MenuItemDtos;
 
 
 import com.food_delivery.zomato_backend.enumTypes.ItemType;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,8 @@ public class MenuItemRequestDto {
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
-    @NotBlank(message = "Price is required")
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0")
     private BigDecimal price;
     @NotNull(message="type is required")
     private ItemType type;

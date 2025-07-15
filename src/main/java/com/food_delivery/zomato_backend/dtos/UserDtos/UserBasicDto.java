@@ -10,6 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class UserBasicDto {
     private Long id;
-    private String name;
+    private String username;
     private String email;
 }

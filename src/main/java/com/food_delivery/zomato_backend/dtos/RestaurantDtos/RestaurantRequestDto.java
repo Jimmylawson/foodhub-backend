@@ -37,8 +37,7 @@ public class RestaurantRequestDto {
     private String phoneNumber;
     @Email(message = "Email is not valid")
     private String email;
-    @NotBlank
-    @Builder.Default
+    @NotNull(message = "Rating is required")
     private BigDecimal rating = BigDecimal.valueOf(4.0);
     @JsonFormat(pattern = "HH:mm")
     private LocalTime openingTime;

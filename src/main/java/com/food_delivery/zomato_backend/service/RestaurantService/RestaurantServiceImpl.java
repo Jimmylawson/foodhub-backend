@@ -3,11 +3,14 @@ package com.food_delivery.zomato_backend.service.RestaurantService;
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantRequestDto;
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantResponseDto;
 import com.food_delivery.zomato_backend.entity.Restaurant;;
+import com.food_delivery.zomato_backend.enumTypes.Role;
 import com.food_delivery.zomato_backend.exceptions.DuplicateRestaurantException;
 import com.food_delivery.zomato_backend.exceptions.restaurantException.RestaurantNotFoundException;
 import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
 import com.food_delivery.zomato_backend.mapper.RestaurantMapper;
 import com.food_delivery.zomato_backend.repository.RestaurantRepository;
+import com.food_delivery.zomato_backend.repository.UserRepository;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +27,7 @@ import java.util.List;
 public class RestaurantServiceImpl implements RestaurantServiceInterface {
     private final RestaurantMapper restaurantMapper;
     private final RestaurantRepository restaurantRepository;
-
+    private final UserRepository userRepository;
     /// Find the restaurant
     private Restaurant getRestaurantOrThrowError(Long id) {
         return restaurantRepository.findById(id)
@@ -33,10 +36,18 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
 
     @Override
     public RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurantRequestDto) {
+        var owner = userRepository.findById(restaurantRequestDto.getOwnerId())
+                .orElseThrow(() -> new UserNotFoundException(restaurantRequestDto.getOwnerId()));
+        if(!owner.getRole().equals(Role.OWNER))
+            throw new ValidationException("Only users with OWNER role can create restaurants");
         if (restaurantRepository.existsByName(restaurantRequestDto.getName())) {
             throw new DuplicateRestaurantException("Restaurant with name " + restaurantRequestDto.getName() + " already exists");
         }
-        return restaurantMapper.toRestaurantResponseDto(restaurantRepository.save(restaurantMapper.toEntity(restaurantRequestDto)));
+
+        var restaurant = restaurantMapper.toEntity(restaurantRequestDto);
+        restaurant.setOwner(owner);
+        var savedRestaurant = restaurantRepository.save(restaurant);
+        return restaurantMapper.toRestaurantResponseDto(savedRestaurant);
     }
 
     @Override
