@@ -9,6 +9,8 @@ import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
 import com.food_delivery.zomato_backend.mapper.RestaurantMapper;
 import com.food_delivery.zomato_backend.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -38,12 +40,9 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
-    public List<RestaurantResponseDto> getAllRestaurants() {
-        return restaurantRepository.findAll()
-                .stream()
-                .map(restaurantMapper::toRestaurantResponseDto)
-                .toList();
-
+    public Page<RestaurantResponseDto> getAllRestaurants(Pageable pageable) {
+       return restaurantRepository.findAll(pageable)
+               .map(restaurantMapper::toRestaurantResponseDto);
 
     }
 

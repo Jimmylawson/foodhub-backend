@@ -18,6 +18,8 @@ import com.food_delivery.zomato_backend.mapper.OrderMapper;
 import com.food_delivery.zomato_backend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -159,6 +161,12 @@ public class OrderServiceImpl implements OrderServiceInterface {
     @Override
     public OrderResponseDto getOrder(Long orderId) {
        return orderMapper.toOrderResponseDto(getOrderOrThrowError(orderId));
+    }
+
+    @Override
+    public Page<OrderResponseDto> getAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable)
+                .map(orderMapper::toOrderResponseDto);
     }
 
     @Override

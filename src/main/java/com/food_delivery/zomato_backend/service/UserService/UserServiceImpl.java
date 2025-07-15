@@ -9,6 +9,8 @@ import com.food_delivery.zomato_backend.mapper.userMappers.UserMapper;
 import com.food_delivery.zomato_backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ import java.util.List;
 public class UserServiceImpl implements UserServiceInterface {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+
+    /// Create A User
     @Override
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         if(userRepository.existsByEmail(userRequestDto.getEmail()))
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
     }
 
+    /// Get A User
     @Override
     public UserResponseDto getUser(Long userId) {
         return userRepository.findById(userId)
@@ -44,14 +49,14 @@ public class UserServiceImpl implements UserServiceInterface {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
+    /// Get All Users
     @Override
-    public List<UserResponseDto> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(userMapper::toUserResponseDto)
-                .toList();
+    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(userMapper::toUserResponseDto);
     }
 
+    /// Delete A User
     @Override
     @Transactional
     public void deleteUser(Long userId) {
@@ -62,6 +67,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
     }
 
+    /// Update A User
     @Override
     @Transactional
     public UserResponseDto updateUser(Long userId, UserRequestDto userRequestDto) {
