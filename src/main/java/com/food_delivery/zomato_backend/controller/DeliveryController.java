@@ -41,7 +41,7 @@ public class DeliveryController {
     @Operation(summary = "Get all deliveries")
     @ApiResponse(responseCode = "200", description = "Deliveries found successfully")
     @GetMapping
-    public ResponseEntity<Page<DeliveryResponseDto>> getAllDeliveries(@PageableDefault(size = 10, sort = "name") Pageable pageable) {
+    public ResponseEntity<Page<DeliveryResponseDto>> getAllDeliveries(@PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
         return ResponseEntity.ok(deliveryServiceInterface.getAllDeliveries(pageable));
     }
 
@@ -50,6 +50,14 @@ public class DeliveryController {
     @ApiResponse(responseCode = "200", description = "Delivery found successfully")
     @PutMapping("/{deliveryId}")
     public ResponseEntity<DeliveryResponseDto> updateDelivery(@PathVariable Long deliveryId, @Valid @RequestBody DeliveryRequestDto deliveryRequestDto) {
+        return ResponseEntity.ok(deliveryServiceInterface.updateDelivery(deliveryId, deliveryRequestDto));
+    }
+
+    /// Partial Update
+    @Operation(summary = "Update a delivery by id")
+    @ApiResponse(responseCode = "200", description = "Delivery found successfully")
+    @PatchMapping("/{deliveryId}")
+    public ResponseEntity<DeliveryResponseDto> partialUpdate(@PathVariable Long deliveryId, @Valid @RequestBody DeliveryRequestDto deliveryRequestDto) {
         return ResponseEntity.ok(deliveryServiceInterface.updateDelivery(deliveryId, deliveryRequestDto));
     }
 

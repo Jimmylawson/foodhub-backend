@@ -9,8 +9,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface DeliveryMapper {
+    @Mapping(target = "orderId", source = "order.id")
     @Mapping(target ="deliveryPersonId", source = "delivery.deliveryPerson.id")
     @Mapping(target = "deliveryPersonName", source = "delivery.deliveryPerson.username")
+    @Mapping(target = "status", source = "deliveryStatus")
     DeliveryResponseDto toDeliveryResponseDto(Delivery delivery);
     Delivery toEntity(DeliveryRequestDto deliveryRequestDto);
 }

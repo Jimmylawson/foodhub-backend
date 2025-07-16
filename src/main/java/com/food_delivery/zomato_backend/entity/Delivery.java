@@ -29,7 +29,6 @@ public class Delivery extends BaseEntity {
     private User deliveryPerson;
     @Enumerated(EnumType.STRING)
     @Column(name="delivery_mode")
-
     private Mode mode;
     @OneToOne
     @JoinColumn(name = "order_id", unique = true)

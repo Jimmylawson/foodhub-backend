@@ -56,18 +56,9 @@ public class DeliveryServiceImpl  implements DeliveryServiceInterface {
                 .build();
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
-        return DeliveryResponseDto.builder()
-                .id(savedDelivery.getId())
-                .orderId(savedDelivery.getOrder().getId())
-                .deliveryPersonId(savedDelivery.getDeliveryPerson().getId())
-                .deliveryPersonName(savedDelivery.getDeliveryPerson().getUsername()) // or getFullName()
-                .mode(savedDelivery.getMode())
-                .status(savedDelivery.getDeliveryStatus())
-                .address(savedDelivery.getAddress())
-                .pickupTime(savedDelivery.getPickupTime())
-                .deliveryTime(savedDelivery.getDeliveryTime())
-                .createdAt(savedDelivery.getCreatedAt()) // if you have auditing or manually set it
-                .build();
+
+
+        return deliveryMapper.toDeliveryResponseDto(savedDelivery);
     }
 
 
