@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+
 public class OrderItemServiceImpl implements OrderItemServiceInterface {
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
@@ -32,6 +33,7 @@ public class OrderItemServiceImpl implements OrderItemServiceInterface {
 
     @Override
     public OrderItemResponseDto saveOrderItem(OrderItemRequestDto orderRequestDto) {
+
         var menuItem = menuItemRepository.findById(orderRequestDto.getMenuItemId())
                 .orElseThrow(() -> new MenuItemNotFoundException(orderRequestDto.getMenuItemId()));
         var order = orderRepository.findById(orderRequestDto.getOrderId())

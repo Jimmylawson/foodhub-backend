@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter @Getter
 public class UserResponseDto {
     private Long id;
 

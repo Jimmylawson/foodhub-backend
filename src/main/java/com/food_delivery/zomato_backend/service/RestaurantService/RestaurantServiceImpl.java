@@ -2,7 +2,7 @@ package com.food_delivery.zomato_backend.service.RestaurantService;
 
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantRequestDto;
 import com.food_delivery.zomato_backend.dtos.RestaurantDtos.RestaurantResponseDto;
-import com.food_delivery.zomato_backend.entity.Restaurant;;
+import com.food_delivery.zomato_backend.entity.Restaurant;
 import com.food_delivery.zomato_backend.enumTypes.Role;
 import com.food_delivery.zomato_backend.exceptions.DuplicateRestaurantException;
 import com.food_delivery.zomato_backend.exceptions.restaurantException.RestaurantNotFoundException;

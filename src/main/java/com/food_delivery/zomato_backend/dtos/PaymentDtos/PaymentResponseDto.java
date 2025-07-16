@@ -1,24 +1,23 @@
 package com.food_delivery.zomato_backend.dtos.PaymentDtos;
 
-import com.food_delivery.zomato_backend.dtos.OrderDtos.OrderResponseDto;
+import com.fasterxml.jackson.annotation.*;
 import com.food_delivery.zomato_backend.enumTypes.PaymentType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
 import jakarta.validation.constraints.FutureOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class PaymentResponseDto {
     private Long id;
-    private OrderResponseDto order;
+    @JsonIgnore
+    private Object order;
     private PaymentType paymentType;
     private Status status;
     private String transactionId;

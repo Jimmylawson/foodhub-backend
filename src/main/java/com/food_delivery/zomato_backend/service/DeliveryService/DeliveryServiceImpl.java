@@ -3,7 +3,7 @@ package com.food_delivery.zomato_backend.service.DeliveryService;
 
 import com.food_delivery.zomato_backend.dtos.DeliveryDtos.DeliveryRequestDto;
 import com.food_delivery.zomato_backend.dtos.DeliveryDtos.DeliveryResponseDto;
-import com.food_delivery.zomato_backend.entity.Delivery;;
+import com.food_delivery.zomato_backend.entity.Delivery;
 import com.food_delivery.zomato_backend.enumTypes.DeliveryStatus;
 import com.food_delivery.zomato_backend.enumTypes.Mode;
 import com.food_delivery.zomato_backend.exceptions.orderException.OrderNotFoundException;

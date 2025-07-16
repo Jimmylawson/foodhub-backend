@@ -4,13 +4,10 @@ package com.food_delivery.zomato_backend.dtos.OrderItemDtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
-@Data
+@Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItemRequestDto {

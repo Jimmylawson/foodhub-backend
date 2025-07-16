@@ -39,7 +39,7 @@ public class Restaurant extends BaseEntity {
     private LocalTime openingTime;
     @Column(name="closing_time")
     private LocalTime closingTime;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="owner_id")
     private User owner;
 

@@ -3,10 +3,7 @@ package com.food_delivery.zomato_backend.dtos.RestaurantDtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +13,8 @@ import java.time.LocalTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Setter
+@Getter
 public class RestaurantRequestDto {
     @NotBlank(message = "Name is required")
     private String name;

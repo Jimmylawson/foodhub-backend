@@ -6,19 +6,16 @@ import com.food_delivery.zomato_backend.enumTypes.OrderType;
 import com.food_delivery.zomato_backend.enumTypes.PaymentType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter  @Setter
 public class OrderRequestDto {
-    @NotBlank(message = "Type is required")
+    @NotNull(message = "Type is required")
     private OrderType type;
     @NotNull(message = "User ID is required")
     private Long userId;

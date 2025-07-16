@@ -5,7 +5,6 @@ import com.food_delivery.zomato_backend.dtos.UserDtos.UserRequestDto;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-;
 
 import java.util.List;
 

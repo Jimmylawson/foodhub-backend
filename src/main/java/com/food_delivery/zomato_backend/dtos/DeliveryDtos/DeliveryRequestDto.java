@@ -6,18 +6,16 @@ import com.food_delivery.zomato_backend.enumTypes.Mode;
 import com.food_delivery.zomato_backend.enumTypes.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-;import java.time.LocalTime;
+import java.time.LocalTime;
 
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 public class DeliveryRequestDto {
 
     @NotNull(message = "Order ID is required")

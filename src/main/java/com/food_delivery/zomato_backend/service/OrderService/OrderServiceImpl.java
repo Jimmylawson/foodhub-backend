@@ -9,8 +9,10 @@ import com.food_delivery.zomato_backend.entity.OrderItem;
 
 import com.food_delivery.zomato_backend.entity.Payment;
 import com.food_delivery.zomato_backend.enumTypes.DeliveryStatus;
+import com.food_delivery.zomato_backend.enumTypes.Mode;
 import com.food_delivery.zomato_backend.enumTypes.OrderType;
 import com.food_delivery.zomato_backend.enumTypes.Status;
+
 import com.food_delivery.zomato_backend.exceptions.restaurantException.MenuItemNotFoundException;
 import com.food_delivery.zomato_backend.exceptions.restaurantException.RestaurantNotFoundException;
 import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
@@ -18,12 +20,14 @@ import com.food_delivery.zomato_backend.mapper.OrderMapper;
 import com.food_delivery.zomato_backend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +36,7 @@ import java.util.UUID;
 record OrderItemResult(List<OrderItem> orderItems, BigDecimal totalPrice){}
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderServiceInterface {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
@@ -49,26 +54,30 @@ public class OrderServiceImpl implements OrderServiceInterface {
     @Override
     @Transactional
     public OrderResponseDto saveOrder(OrderRequestDto orderRequestDto) {
+        log.info("Starting order creation with request: {}", orderRequestDto);
         ///  Fetch the User
         var user = userRepository.findById(orderRequestDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(orderRequestDto.getUserId()));
+        log.info("Fetched user: {}", user);
 
         /// convert and save the orderItem
         var result = convertToOrderItemsAndCalculateTotal(orderRequestDto);
         List<OrderItem> orderItems = result.orderItems();
         BigDecimal totalPrice = result.totalPrice();
 
+        /// Create the Order
         Order order = Order.builder()
                 .type(orderRequestDto.getType())
                 .price(totalPrice)
                 .user(user)
                 .orderItems(orderItems)
                 .build();
-
+    log.info("Created order: {}", order);
 
 
                 ///Set reverser relationship: each OrderItem needs its Order
                 orderItems.forEach(item -> item.setOrder(order));
+                log.info("Set reverser relationship: each OrderItem needs its Order");
 
         /// Delivery
         Delivery delivery = null;
@@ -78,6 +87,7 @@ public class OrderServiceImpl implements OrderServiceInterface {
                     .order(order)
                     .deliveryStatus(DeliveryStatus.PENDING)
                     .build();
+            log.info("Created delivery: {}", delivery);
         }
 
         /// Payment
@@ -88,16 +98,20 @@ public class OrderServiceImpl implements OrderServiceInterface {
                 .transactionId(UUID.randomUUID().toString())
                 .paidAt(LocalDateTime.now())
                 .build();
+        log.info("Created payment: {}", payment);
         /// Assign the delivery and payment to order
         order.setDelivery(delivery);
         order.setPayment(payment);
+        log.info("Assign the delivery and payment to order");
 
 
                 /// 3.Create and save the order entity
         orderRepository.save(order);
+       log.info("Order saved: {}", order);
 
         /// Convert and return the response
         return orderMapper.toOrderResponseDto(order);
+
     }
 
     @Override

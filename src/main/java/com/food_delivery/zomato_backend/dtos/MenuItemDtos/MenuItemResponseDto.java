@@ -2,14 +2,12 @@ package com.food_delivery.zomato_backend.dtos.MenuItemDtos;
 
 import com.food_delivery.zomato_backend.enumTypes.Category;
 import com.food_delivery.zomato_backend.enumTypes.ItemType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
