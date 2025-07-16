@@ -76,7 +76,7 @@ public class PaymentServiceImpl implements PaymentServiceInterface {
         var payment = getPaymentOrThrowError(id);
 
 
-        // Business rule validation
+        /// Business rule validation
         if (payment.getStatus() == Status.COMPLETED && newStatus == Status.PENDING) {
             throw new IllegalStateException("Cannot change status from COMPLETED to PENDING");
         }

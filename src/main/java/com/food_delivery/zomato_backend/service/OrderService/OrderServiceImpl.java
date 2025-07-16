@@ -34,6 +34,7 @@ import java.util.UUID;
 
 
 record OrderItemResult(List<OrderItem> orderItems, BigDecimal totalPrice){}
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

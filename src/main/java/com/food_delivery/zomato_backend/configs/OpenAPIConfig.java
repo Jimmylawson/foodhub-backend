@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
                 version = "v1",
                 description = "API documentation for Zomato clone backend"
         ),
-        servers = @Server(url = "http://localhost:8080", description = "Local Server")
+        servers = @Server(url = "http://localhost:8081", description = "Local Server")
 )
 public class OpenAPIConfig {
 

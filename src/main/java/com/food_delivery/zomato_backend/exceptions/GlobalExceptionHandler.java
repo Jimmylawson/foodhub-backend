@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleDuplicateRestaurantException(DuplicateUserException ex) {
         log.error("User already exists: {}", ex.getMessage());
         var errorResponseDto = buildErrorResponse(
-                "Restaurant  duplicate Not  found",
+                "Restaurant duplicate Not found",
                 HttpStatus.CONFLICT,
                 ex.getMessage());
 

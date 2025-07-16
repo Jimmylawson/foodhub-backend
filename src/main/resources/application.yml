@@ -17,11 +17,11 @@ spring:
       enabled: true
       path: "/swagger-ui.html"
 
-logging:
-  level:
-    com.food_delivery.zomato_backend: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate: DEBUG
-    org.springframework.transaction: DEBUG
+#logging:
+#  level:
+#    com.food_delivery.zomato_backend: DEBUG
+#    org.springframework.web: DEBUG
+#    org.hibernate: DEBUG
+#    org.springframework.transaction: DEBUG
 
 
