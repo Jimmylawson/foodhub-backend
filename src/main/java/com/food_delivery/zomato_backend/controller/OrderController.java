@@ -39,7 +39,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDto> getOrder(Long orderId){
+    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId){
         return ResponseEntity.ok(orderServiceInterface.getOrder(orderId));
     }
 
@@ -50,7 +50,7 @@ public class OrderController {
     })
     @GetMapping()
     public ResponseEntity<Page<OrderResponseDto>> getAllOrders(@PageableDefault(size = 10,
-    sort="createAt") Pageable pageable){
+    sort="createdAt") Pageable pageable){
         return ResponseEntity.ok(orderServiceInterface.getAllOrders(pageable));
     }
 
