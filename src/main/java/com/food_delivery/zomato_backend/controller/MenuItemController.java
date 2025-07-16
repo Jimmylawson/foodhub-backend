@@ -38,7 +38,7 @@ public class MenuItemController {
             @ApiResponse(responseCode = "200", description = "Menu item found successfully"),
             @ApiResponse(responseCode = "404", description = "Menu item not found")
     })
-    @GetMapping("/restaurants/menu-items/{menuItemId}")
+    @GetMapping("/restaurants/menu-items/public/{menuItemId}")
     public ResponseEntity<MenuItemResponseDto> getMenuItem(@PathVariable Long menuItemId) {
         return ResponseEntity.ok(menuItemServiceInterface.getMenuItem(menuItemId));
     }

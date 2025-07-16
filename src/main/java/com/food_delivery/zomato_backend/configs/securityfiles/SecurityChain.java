@@ -1,15 +1,19 @@
 package com.food_delivery.zomato_backend.configs.securityfiles;
 
+import com.food_delivery.zomato_backend.service.auth.CustomUserDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityChain {
-
+    private final CustomUserDetailService customUserDetailService;
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -23,8 +27,15 @@ public class SecurityChain {
                             "/swagger-ui.html"
 
                     ).permitAll();
-                    /// All other endpoints require authentication
-                    request.anyRequest().authenticated();
+                    /// All other endpoints requiring authentication
+                    request.requestMatchers(HttpMethod.GET, "/api/v1/restaurants/menu-items/public/**").permitAll()
+                            .requestMatchers("/api/v1/deliveries/**").hasAnyRole("ADMIN","DELIVERY")
+                            .requestMatchers("/api/v1/restaurants/**").hasAnyRole("ADMIN","OWNER")
+                            .requestMatchers("/api/v1/orders/**").hasAnyRole("ADMIN","USER")
+                            .requestMatchers("/api/v1/order-items/**").hasAnyRole("ADMIN","USER")
+                            .requestMatchers("/api/v1/menu-items/**").hasAnyRole("ADMIN","OWNER")
+                            .anyRequest().authenticated();
+
                 })
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
