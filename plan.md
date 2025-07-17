@@ -3,7 +3,7 @@
 ## Project Overview
 Backend service for Zomato-like food delivery platform built with Spring Boot.
 
-## Working on UserDetailService
+## Working on UserDetailService(Done)
  #User Roles
 - USER,/// Regular customer placing orders
 - ADMIN, /// Admin with platform privileges
@@ -71,4 +71,77 @@ Backend service for Zomato-like food delivery platform built with Spring Boot.
 - API Versioning: v1
 
 ## Recent Changes
+- 2025-07-16: Initial project setup and security configuration
+
+## Upcoming Features & Tasks
+
+### 1. JWT Authentication
+- [ ] **JWT Utility Class**
+  - Generate JWT tokens
+  - Validate tokens
+  - Extract claims and expiration
+- [ ] **JWT Filter**
+  - Implement OncePerRequestFilter
+  - Extract and validate tokens from requests
+  - Set authentication in security context
+- [ ] **Security Chain Integration**
+  - Add JWT filter before UsernamePasswordAuthenticationFilter
+  - Configure token endpoints
+
+### 2. Password Reset Flow
+- [ ] **Endpoints**
+  - `POST /api/v1/auth/forgot-password` - Initiate password reset
+  - `POST /api/v1/auth/reset-password` - Complete password reset
+- [ ] **Token Management**
+  - Generate secure reset tokens
+  - Set token expiration (e.g., 1 hour)
+  - Store tokens securely
+- [ ] **Email Service**
+  - Send password reset emails
+  - HTML email templates
+  - Email queue for better performance
+
+### 3. Refresh Tokens
+- [ ] **Token Generation**
+  - Create long-lived refresh tokens
+  - Store hashed tokens in database
+- [ ] **Secure Storage**
+  - HttpOnly cookies for web clients
+  - Secure flag for HTTPS
+- [ ] **Refresh Endpoint**
+  - `POST /api/v1/auth/refresh-token`
+  - Validate refresh token
+  - Issue new access token
+
+### 4. Security Hardening
+- [ ] **CSRF Protection**
+  - Enable/configure based on client type
+  - Cookie-based CSRF tokens
+- [ ] **CORS Configuration**
+  - Configure allowed origins
+  - Set allowed methods and headers
+- [ ] **Session Management**
+  - Stateless session policy
+  - Concurrent session control
+- [ ] **Rate Limiting**
+  - Implement per-endpoint limits
+  - Block suspicious IPs
+
+### 5. Testing
+- [ ] **Unit Tests**
+  - Authentication service
+  - JWT utilities
+  - Password encoding
+- [ ] **Integration Tests**
+  - Protected endpoints
+  - Role-based access
+  - Token refresh flow
+- [ ] **Edge Cases**
+  - Expired tokens
+  - Invalid tokens
+  - Rate limiting
+  - Concurrent logins
+
+## Recent Changes
+- 2025-07-16: Implemented custom AuthenticationProvider with exception handling
 - 2025-07-16: Initial project setup and security configuration
