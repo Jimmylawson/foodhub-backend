@@ -21,12 +21,16 @@ public class SecurityChain {
     private final CustomUserDetailService customUserDetailService;
     private final FoodHubAuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(
                             /// public endpoints
@@ -45,6 +49,7 @@ public class SecurityChain {
                             .requestMatchers("/api/v1/order-items/**").hasAnyRole("ADMIN","USER")
                             .requestMatchers("/api/v1/menu-items/**").hasAnyRole("ADMIN","OWNER")
                             .anyRequest().authenticated();
+
 
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

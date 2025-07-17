@@ -14,6 +14,7 @@ import javax.crypto.SecretKey;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 
@@ -33,7 +34,7 @@ public class JwtTokenService {
         return generateToken(new HashMap<>(),userDetails);
     }
     /// Generate token with claims
-    public String generateToken(HashMap<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
@@ -95,5 +96,9 @@ public class JwtTokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Long getExpirationTime() {
+        return jwtExpirationMs;
     }
 }
