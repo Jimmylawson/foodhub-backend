@@ -187,6 +187,7 @@ public class GlobalExceptionHandler {
                 .body(Map.of("errors", errors));
     }
 
+    /// AUTHENTICATION EXCEPTIONS
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidaCredentials(InvalidCredentialsException ex) {
         log.error("Invalid credentials exception occurred: {}", ex.getMessage());
@@ -198,6 +199,26 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExceptionJwtException.class)
+    public ResponseEntity<ErrorResponseDto> handleExceptionJwtException(ExceptionJwtException ex) {
+        log.error("Exception JWT exception occurred: {}", ex.getMessage());
+
+        HttpStatus status = ex.getMessage().toLowerCase().contains("expired")
+                ? HttpStatus.UNAUTHORIZED
+                : HttpStatus.FORBIDDEN;
+
+        var errorResponseDto = buildErrorResponse(
+                "Authentication failed",
+                status,
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(
+                errorResponseDto,
+               status
+        );
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

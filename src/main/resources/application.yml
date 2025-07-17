@@ -16,6 +16,11 @@ spring:
     swagger-ui:
       enabled: true
       path: "/swagger-ui.html"
+  jwt:
+    secret : L2fh+PFEMZ1moV7pb2pfAXlFq9N6KMbTVfoq2L1JvZo= # genereated token using openssl
+    expiration : 86400000 #24 hours in milliseconds
+    issuer : jimmydev-app
+
 
 #logging:
 #  level:
