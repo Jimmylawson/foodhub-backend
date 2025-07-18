@@ -192,6 +192,26 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void deleteUserTest(){
+        /// Arrange
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
 
+          /// Act
+        userService.deleteUser(1L);
+
+        ///Assert
+        verify(userRepository).findById(1L);
+        verify(userRepository).deleteById(1L);
+    }
+    @Test
+    public void deleteUserThrowsWhenNotFound() {
+        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(99L));
+
+        verify(userRepository).findById(99L);
+        verify(userRepository, never()).delete(any());
+    }
 }
