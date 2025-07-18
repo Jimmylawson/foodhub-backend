@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -38,8 +39,9 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order found successfully"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId){
+    public ResponseEntity<OrderResponseDto> getMyOrder(@PathVariable Long orderId){
         return ResponseEntity.ok(orderServiceInterface.getOrder(orderId));
     }
 
@@ -49,6 +51,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Orders not found")
     })
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<OrderResponseDto>> getAllOrders(@PageableDefault(size = 10,
     sort="createdAt") Pageable pageable){
         return ResponseEntity.ok(orderServiceInterface.getAllOrders(pageable));

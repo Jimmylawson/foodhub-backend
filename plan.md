@@ -8,6 +8,12 @@ Backend service for Zomato-like food delivery platform built with Spring Boot.
 - 2025-07-16: Initial project setup and security configuration
 - 2025-07-16: JWT Authentication implemented
 
+## Next Changes
+- 2025-07-17: Password implementation
+- 2025-07-17: Make sure JWT is working 
+- 2025-07-17: Write Testing for all endpoints 
+
+
 ## Core Backend Features
 
 ### 1. Authentication & Security

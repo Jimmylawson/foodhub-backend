@@ -52,9 +52,7 @@ public class JwtTokenService {
     }
 
     /// Extract expiration date from JWT token
-    public Date extractExpirationDateFromJwt(String jwt) {
-        return extractClaim(jwt, Claims::getExpiration);
-    }
+    public Date extractExpirationDateFromJwt(String jwt) {return extractClaim(jwt, Claims::getExpiration);}
 
     /// Extract a specific claim
     public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
@@ -98,7 +96,6 @@ public class JwtTokenService {
                 .compact();
     }
 
-    public Long getExpirationTime() {
-        return jwtExpirationMs;
-    }
+    public Long getExpirationTime() {return jwtExpirationMs;}
+
 }

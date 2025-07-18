@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,8 +27,9 @@ public class MenuItemController {
     /// Create endpoints
     @Operation(summary = "Create a new menu item")
     @ApiResponse(responseCode = "201", description = "Menu item created successfully")
+    @PreAuthorize("hasAnyRole('OWNER','ADMIN')")
     @PostMapping("/restaurants/menu-items")
-    public ResponseEntity<MenuItemResponseDto> createMenuItem(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto){
+    public ResponseEntity<MenuItemResponseDto> addMenuItem(@Valid @RequestBody MenuItemRequestDto menuItemRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(menuItemServiceInterface.saveMenuItem(menuItemRequestDto));
     }
 

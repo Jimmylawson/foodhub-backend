@@ -3,6 +3,7 @@ package com.food_delivery.zomato_backend.configs.securityfiles;
 import com.food_delivery.zomato_backend.exceptions.InvalidCredentialsException;
 import com.food_delivery.zomato_backend.service.auth.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,10 +12,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class FoodHubAuthenticationProvider implements AuthenticationProvider {
     private final CustomUserDetailService customUserDetailService;
     private final PasswordEncoder passwordEncoder;
+
+    public FoodHubAuthenticationProvider(CustomUserDetailService customUserDetailService, 
+                                       PasswordEncoder passwordEncoder) {
+        this.customUserDetailService = customUserDetailService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
