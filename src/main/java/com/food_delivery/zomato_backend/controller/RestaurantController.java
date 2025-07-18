@@ -27,6 +27,7 @@ public class RestaurantController {
     @Operation(summary = "Create a new restaurant")
     @ApiResponse(responseCode = "201", description = "Restaurant created successfully")
    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     public ResponseEntity<RestaurantResponseDto> createRestaurant(@Valid @RequestBody RestaurantRequestDto   restaurantRequestDto){
        return ResponseEntity.ok(restaurantService.createRestaurant(restaurantRequestDto));
    }
@@ -52,6 +53,7 @@ public class RestaurantController {
     @Operation(summary = "Update a restaurant by id")
     @ApiResponse(responseCode = "200", description = "Restaurant found successfully")
     @ApiResponse(responseCode = "404", description = "Restaurant not found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @PutMapping("/{restaurantId}")
     public ResponseEntity<RestaurantResponseDto> updateRestaurant(@PathVariable Long restaurantId, @Valid @RequestBody RestaurantRequestDto restaurantRequestDto){
         return ResponseEntity.ok(restaurantService.updateRestaurant(restaurantId, restaurantRequestDto));
@@ -60,6 +62,7 @@ public class RestaurantController {
     @Operation(summary = "Partially update a restaurant by id")
     @ApiResponse(responseCode = "200", description = "Restaurant found successfully")
     @ApiResponse(responseCode = "404", description = "Restaurant not found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @PatchMapping("/{restaurantId}")
     public ResponseEntity<RestaurantResponseDto> partialUpdate(@PathVariable Long restaurantId, @Valid @RequestBody RestaurantRequestDto restaurantRequestDto){
         return ResponseEntity.ok(restaurantService.updateRestaurant(restaurantId, restaurantRequestDto));
@@ -69,6 +72,7 @@ public class RestaurantController {
     @Operation(summary = "Delete a restaurant by id")
     @ApiResponse(responseCode = "204", description = "Restaurant deleted successfully")
     @ApiResponse(responseCode = "404", description = "Restaurant not found")
+    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     @DeleteMapping("/{restaurantId}")
     public ResponseEntity<String> deleteRestaurant(@PathVariable Long restaurantId){
         restaurantService.deleteRestaurant(restaurantId);

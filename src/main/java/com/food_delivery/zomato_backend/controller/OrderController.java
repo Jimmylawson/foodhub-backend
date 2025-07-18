@@ -28,6 +28,7 @@ public class OrderController {
 
     @Operation(summary = "Create a new order")
     @ApiResponse(responseCode = "201", description = "Order created successfully")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(orderServiceInterface.saveOrder(orderRequestDto));
@@ -39,9 +40,9 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order found successfully"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDto> getMyOrder(@PathVariable Long orderId){
+    public ResponseEntity<OrderResponseDto> getUserOrder(@PathVariable Long orderId){
         return ResponseEntity.ok(orderServiceInterface.getOrder(orderId));
     }
 

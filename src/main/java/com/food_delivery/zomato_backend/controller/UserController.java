@@ -41,8 +41,9 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "User found successfully"),
         @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("isAuthenticated()")
      @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long userId){
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId){
         return ResponseEntity.ok(userService.getUser(userId));
     }
 

@@ -34,6 +34,8 @@ public class DeliveryController {
     /// Read endpoints
     @Operation(summary = "Get a delivery by id")
     @ApiResponse(responseCode = "200", description = "Delivery found successfully")
+    @ApiResponse(responseCode = "404", description = "Delivery not found")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<DeliveryResponseDto> getDelivery(@PathVariable Long id) {
         return ResponseEntity.ok(deliveryServiceInterface.getDelivery(id));
@@ -41,6 +43,7 @@ public class DeliveryController {
 
     @Operation(summary = "Get all deliveries")
     @ApiResponse(responseCode = "200", description = "Deliveries found successfully")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<DeliveryResponseDto>> getAllDeliveries(@PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
         return ResponseEntity.ok(deliveryServiceInterface.getAllDeliveries(pageable));
