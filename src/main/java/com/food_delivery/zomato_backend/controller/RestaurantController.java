@@ -29,7 +29,7 @@ public class RestaurantController {
    @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'OWNER')")
     public ResponseEntity<RestaurantResponseDto> createRestaurant(@Valid @RequestBody RestaurantRequestDto   restaurantRequestDto){
-       return ResponseEntity.ok(restaurantService.createRestaurant(restaurantRequestDto));
+       return ResponseEntity.status(201).body(restaurantService.createRestaurant(restaurantRequestDto));
    }
     /// Read endpoints
     @Operation(summary ="Get a restaurant by id")

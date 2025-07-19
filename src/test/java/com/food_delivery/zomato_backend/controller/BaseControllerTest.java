@@ -1,4 +1,4 @@
-package com.food_delivery.zomato_backend;
+package com.food_delivery.zomato_backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

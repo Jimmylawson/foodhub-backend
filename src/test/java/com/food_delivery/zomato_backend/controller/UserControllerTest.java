@@ -1,18 +1,12 @@
 package com.food_delivery.zomato_backend.controller;
 
-import com.food_delivery.zomato_backend.BaseControllerTest;
-import com.food_delivery.zomato_backend.TestSecurityConfigBase;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserRequestDto;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserResponseDto;
-import com.food_delivery.zomato_backend.entity.User;
 import com.food_delivery.zomato_backend.enumTypes.Role;
 import com.food_delivery.zomato_backend.service.UserService.UserServiceInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -20,16 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
-import static javax.management.Query.times;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,8 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(UserController.class)
-@AutoConfigureJsonTesters
-
 @ContextConfiguration(classes = {UserController.class, TestSecurityConfigBase.class})
 public class UserControllerTest extends BaseControllerTest {
 

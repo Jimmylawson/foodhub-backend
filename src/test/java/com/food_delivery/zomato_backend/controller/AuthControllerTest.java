@@ -1,7 +1,5 @@
 package com.food_delivery.zomato_backend.controller;
 
-import com.food_delivery.zomato_backend.BaseControllerTest;
-import com.food_delivery.zomato_backend.TestSecurityConfigBase;
 import com.food_delivery.zomato_backend.controller.auth.AuthController;
 import com.food_delivery.zomato_backend.dtos.authDto.AuthRequest;
 import com.food_delivery.zomato_backend.dtos.authDto.AuthResponse;
@@ -10,25 +8,12 @@ import com.food_delivery.zomato_backend.service.UserService.UserServiceInterface
 import com.food_delivery.zomato_backend.service.auth.AuthService;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-
-import java.util.Collections;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

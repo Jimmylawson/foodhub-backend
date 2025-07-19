@@ -12,7 +12,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
 nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RestaurantMapper {
-
+    @Mapping(target = "id", source = "id")
     RestaurantResponseDto toRestaurantResponseDto(Restaurant restaurant);
     Restaurant toEntity(RestaurantRequestDto restaurantRequestDto);
 
