@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant,Long> {
@@ -39,4 +40,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant,Long> {
     List<Restaurant> findByRatingGreaterThanEqual(@Param("minRating") BigDecimal minRating);
 
     List<Restaurant> findByOwnerId(Long ownerId);
+
+    Optional<Restaurant> findByName(@NotBlank(message = "Name is required") String name);
 }

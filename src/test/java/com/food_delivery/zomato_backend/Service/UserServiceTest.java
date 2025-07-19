@@ -3,6 +3,7 @@ package com.food_delivery.zomato_backend.Service;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserRequestDto;
 import com.food_delivery.zomato_backend.dtos.UserDtos.UserResponseDto;
 import com.food_delivery.zomato_backend.entity.User;
+import com.food_delivery.zomato_backend.repository.UserRepository;
 import com.food_delivery.zomato_backend.enumTypes.Role;
 import com.food_delivery.zomato_backend.exceptions.users.DuplicateUserException;
 import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-   @Mock
+    @Mock
     private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -41,7 +43,7 @@ public class UserServiceTest {
     private UserRequestDto requestDto;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         user = User.builder()
                 .id(1L)
                 .email("test@example.com")
@@ -53,7 +55,7 @@ public class UserServiceTest {
                 .build();
 
         /// 1. Prepare test data
-         requestDto = UserRequestDto.builder()
+        requestDto = UserRequestDto.builder()
                 .username("testuser")
                 .email("test@example.com")
                 .password("encodedPassword")
@@ -64,9 +66,8 @@ public class UserServiceTest {
     }
 
 
-
     @Test
-    void saveUserTest(){
+    void saveUserTest() {
 
 
         /// Set up mock behavoir
@@ -81,7 +82,6 @@ public class UserServiceTest {
                         .username(user.getUsername())
                         .build()
         );
-
 
 
         var response = userService.createUser(requestDto);
@@ -100,7 +100,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveUserDuplicateEmailTest(){
+    public void saveUserDuplicateEmailTest() {
         when(userRepository.existsByEmail(requestDto.getEmail())).thenReturn(true);
         assertThrows(DuplicateUserException.class, () -> {
             userService.createUser(requestDto);
@@ -111,7 +111,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserTest(){
+    public void getUserTest() {
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userMapper.toUserResponseDto(user)).thenReturn(
@@ -133,7 +133,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserNotFoundTest(){
+    public void getUserNotFoundTest() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> {
             userService.getUser(1L);
@@ -142,7 +142,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getAllUsersTest(){
+    public void getAllUsersTest() {
         User user2 = User.builder()
                 .id(2L)
                 .email("test2@example.com")
@@ -167,11 +167,11 @@ public class UserServiceTest {
                 .username(user2.getUsername())
                 .build();
 
-        var users = List.of(user,user2);
-        var dtos = List.of(userResponseDto,userResponseDto2);
+        var users = List.of(user, user2);
+        var dtos = List.of(userResponseDto, userResponseDto2);
 
         Pageable pageable = Pageable.unpaged();
-        var userPage = new PageImpl<> (users, pageable, users.size());
+        var userPage = new PageImpl<>(users, pageable, users.size());
         ///  Stub repository and mapper
         when(userRepository.findAll(pageable)).thenReturn(userPage);
         when(userMapper.toUserResponseDto(user)).thenReturn(userResponseDto);
@@ -193,18 +193,19 @@ public class UserServiceTest {
     }
 
     @Test
-    public void deleteUserTest(){
+    public void deleteUserTest() {
         /// Arrange
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
 
-          /// Act
+        /// Act
         userService.deleteUser(1L);
 
         ///Assert
         verify(userRepository).findById(1L);
         verify(userRepository).deleteById(1L);
     }
+
     @Test
     public void deleteUserThrowsWhenNotFound() {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
