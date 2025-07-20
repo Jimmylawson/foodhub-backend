@@ -49,6 +49,7 @@ public class SecurityChain {
                             "/api/v1/auth/**",
                             "/api/v1/public/**",
                             "/v3/api-docs/**",
+                            "/v3/api-docs.yaml",
                             "/swagger-ui/**",
                             "/swagger-ui.html"
 

@@ -13,6 +13,10 @@ Backend service for Zomato-like food delivery platform built with Spring Boot.
 - 2025-07-17: Make sure JWT is working 
 - 2025-07-17: Write Testing for all endpoints 
 
+## Next Changes
+- 2025-07-20 : CI/CD 
+
+
 
 ## Core Backend Features
 
