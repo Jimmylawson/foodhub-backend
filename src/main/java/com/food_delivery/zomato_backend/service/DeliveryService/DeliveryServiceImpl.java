@@ -14,6 +14,10 @@ import com.food_delivery.zomato_backend.repository.DeliveryRepository;
 import com.food_delivery.zomato_backend.repository.OrderRepository;
 import com.food_delivery.zomato_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,11 +67,13 @@ public class DeliveryServiceImpl  implements DeliveryServiceInterface {
 
 
     @Override
+    @Cacheable(value = "delivery", key = "#id")
     public DeliveryResponseDto getDelivery(Long id) {
         return deliveryMapper.toDeliveryResponseDto(getDeliveryOrThrowError(id));
     }
 
     @Override
+    @CachePut(value = "delivery", key = "#id")
     public DeliveryResponseDto updateDelivery(Long id, DeliveryRequestDto deliveryRequestDto) {
         var delivery = getDeliveryOrThrowError(id);
 
@@ -109,6 +115,7 @@ public class DeliveryServiceImpl  implements DeliveryServiceInterface {
     }
 
     @Override
+    @CacheEvict(value = "delivery",key = "#id")
     public void deleteDelivery(Long id) {
         deliveryRepository.delete(getDeliveryOrThrowError(id));
     }

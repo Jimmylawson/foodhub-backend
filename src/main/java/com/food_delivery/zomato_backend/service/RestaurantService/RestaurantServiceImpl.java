@@ -12,6 +12,11 @@ import com.food_delivery.zomato_backend.repository.RestaurantRepository;
 import com.food_delivery.zomato_backend.repository.UserRepository;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
+    @Cacheable("allRestaurants")
     public Page<RestaurantResponseDto> getAllRestaurants(Pageable pageable) {
        return restaurantRepository.findAll(pageable)
                .map(restaurantMapper::toRestaurantResponseDto);
@@ -60,11 +66,14 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
 
 
     @Override
-    public RestaurantResponseDto getRestaurant(Long id) {
-        return restaurantMapper.toRestaurantResponseDto(getRestaurantOrThrowError(id));
+    @Cacheable(value = "restaurant",key="#restaurantId")
+    public RestaurantResponseDto getRestaurant(Long restaurantId) {
+        return restaurantMapper.toRestaurantResponseDto(getRestaurantOrThrowError(restaurantId));
     }
 
     @Override
+    @CachePut(value = "restaurant",key="#id")
+    @CacheEvict(value = "allRestaurants",allEntries = true)
     public RestaurantResponseDto updateRestaurant(Long id, RestaurantRequestDto restaurantRequestDto) {
         /// Get existing restaurant
         Restaurant restaurant = getRestaurantOrThrowError(id);
@@ -97,6 +106,10 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "allRestaurants",allEntries = true),
+            @CacheEvict(value = "restaurant",key = "#id")
+    })
     public void deleteRestaurant(Long id) {
         var restaurant = getRestaurantOrThrowError(id);
         restaurantRepository.delete(restaurant);
@@ -113,6 +126,7 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
+    @Cacheable("nearbyRestaurants")
     public List<RestaurantResponseDto> getNearByRestaurants(Double latitude, Double longitude, Double radiusKm) {
         return restaurantRepository.findNearbyRestaurants(latitude, longitude, radiusKm)
                 .stream()
@@ -122,6 +136,7 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
+    @CachePut(value = "restaurant",key="#id")
     public void updateRestaurantRating(Long id, Double rating) {
         var restaurant = getRestaurantOrThrowError(id);
         restaurant.setRating(BigDecimal.valueOf(rating));
@@ -130,6 +145,7 @@ public class RestaurantServiceImpl implements RestaurantServiceInterface {
     }
 
     @Override
+    @Cacheable("restaurantsByRating")
     public List<RestaurantResponseDto> getRestaurantsByRating(Double rating) {
         if(rating == null || rating < 0 || rating > 5){
             throw new IllegalArgumentException("Rating must be between 0 and 5");

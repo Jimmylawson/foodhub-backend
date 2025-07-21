@@ -7,8 +7,13 @@ import com.food_delivery.zomato_backend.exceptions.users.DuplicateUserException;
 import com.food_delivery.zomato_backend.exceptions.users.UserNotFoundException;
 import com.food_delivery.zomato_backend.mapper.userMappers.UserMapper;
 import com.food_delivery.zomato_backend.repository.UserRepository;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +51,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
     /// Get A User
     @Override
+    @Cacheable(value = "users", key = "#userId")
     public UserResponseDto getUser(Long userId) {
         return userRepository.findById(userId)
                 .map(userMapper::toUserResponseDto)
@@ -54,6 +60,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
     /// Get All Users
     @Override
+    @Cacheable("allUsers")
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(userMapper::toUserResponseDto);
@@ -62,6 +69,10 @@ public class UserServiceImpl implements UserServiceInterface {
     /// Delete A User
     @Override
     @Transactional
+    @Caching(evict ={
+            @CacheEvict(value = "users", key = "#userId"),
+            @CacheEvict(value = "allUsers",allEntries = true)
+    })
     public void deleteUser(Long userId) {
         /// If the user does not exist throw an exception
         var user  = getUserOrThrow(userId);
@@ -73,6 +84,8 @@ public class UserServiceImpl implements UserServiceInterface {
     /// Update A User
     @Override
     @Transactional
+    @CachePut(value = "users", key = "#userId")
+    @CacheEvict(value="allUsers",allEntries = true)
     public UserResponseDto updateUser(Long userId, UserRequestDto userRequestDto) {
         /// Fetch existing user or throw an exception
         var user = getUserOrThrow(userId);

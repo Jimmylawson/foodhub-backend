@@ -21,6 +21,9 @@ import com.food_delivery.zomato_backend.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -115,6 +118,7 @@ public class OrderServiceImpl implements OrderServiceInterface {
     }
 
     @Override
+    @CachePut(value = "orders", key = "#orderId")
     public OrderResponseDto updateOrder(Long orderId, OrderRequestDto orderRequestDto) {
         /// Fetch the order from the database
         var order  = getOrderOrThrowError(orderId);
@@ -173,17 +177,20 @@ public class OrderServiceImpl implements OrderServiceInterface {
         return new OrderItemResult(orderItems, totalPrice);
     }
     @Override
+    @Cacheable(value="orders", key="#orderId")
     public OrderResponseDto getOrder(Long orderId) {
        return orderMapper.toOrderResponseDto(getOrderOrThrowError(orderId));
     }
 
     @Override
+    @Cacheable("allOrders")
     public Page<OrderResponseDto> getAllOrders(Pageable pageable) {
         return orderRepository.findAll(pageable)
                 .map(orderMapper::toOrderResponseDto);
     }
 
     @Override
+    @CacheEvict(value = {"orders", "allOrders"}, allEntries = true)
     public void deleteOrder(Long orderId) {
         var order = getOrderOrThrowError(orderId);
         orderRepository.delete(order);

@@ -12,6 +12,9 @@ import com.food_delivery.zomato_backend.repository.OrderRepository;
 import com.food_delivery.zomato_backend.repository.RestaurantRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,6 @@ public class MenuItemServiceImpl implements MenuItemServiceInterface {
     private final MenuItemMapper menuItemMapper;
     private final MenuItemRepository menuItemRepository;
     private final RestaurantRepository restaurantRepository;
-    private final OrderRepository orderRepository;
 
 
     /// Find the order
@@ -52,6 +54,7 @@ public class MenuItemServiceImpl implements MenuItemServiceInterface {
 
     @Override
     @Transactional
+    @CachePut(value = "menuItems", key = "#menuItemId")
     public MenuItemResponseDto updateMenuItem(Long menuItemId, MenuItemRequestDto menuItemRequestDto) {
         var menuItem = getMenuItemOrThrowError(menuItemId);
 
@@ -69,12 +72,14 @@ public class MenuItemServiceImpl implements MenuItemServiceInterface {
 
     @Override
     @Transactional
+    @CacheEvict(value = "menuItems", key = "#menuItemId")
     public void deleteMenuItem(Long menuItemId) {
         var menuItem = getMenuItemOrThrowError(menuItemId);
         menuItemRepository.delete(menuItem);
     }
 
     @Override
+    @Cacheable(value = "menuItems", key = "#menuItemId")
     public MenuItemResponseDto getMenuItem(Long menuItemId) {
         var menuItem = getMenuItemOrThrowError(menuItemId);
 
@@ -82,6 +87,7 @@ public class MenuItemServiceImpl implements MenuItemServiceInterface {
     }
 
     @Override
+    @Cacheable(value ="allMenuItems", key= "#restaurantId")
     public Page<MenuItemResponseDto> getAllMenuItemByRestaurantId(Long restaurantId, Pageable pageable) {
       if(!restaurantRepository.existsById(restaurantId))
           throw new RestaurantNotFoundException(restaurantId);
